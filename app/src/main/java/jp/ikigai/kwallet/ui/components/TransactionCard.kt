@@ -43,11 +43,12 @@ import java.util.Locale
 @Composable
 fun TransactionCard(
     transactionDetailsWithIcon: TransactionDetailsWithIcons,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
     ElevatedCard(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .combinedClickable(
                 onClick = onClick,

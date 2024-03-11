@@ -375,6 +375,7 @@ fun TransactionScreen(
                         ) { _, transactionDetailsWithIcon ->
                             TransactionCard(
                                 transactionDetailsWithIcon = transactionDetailsWithIcon,
+                                modifier = Modifier.animateItemPlacement(),
                                 onClick = {
                                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                     editTransaction(transactionDetailsWithIcon.id)
