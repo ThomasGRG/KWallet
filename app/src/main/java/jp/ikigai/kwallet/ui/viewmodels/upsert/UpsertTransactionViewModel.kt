@@ -223,25 +223,16 @@ class UpsertTransactionViewModel(
 
             viewModelScope.launch {
                 val jobs = if (transactionId != -1L) {
-                    val updateBalanceJob =
-                        if ((transactionType.baseType == Constants.DEBIT && transaction.amount > previousAmount) || (transactionType.baseType == Constants.CREDIT && transaction.amount <= previousAmount)) {
-                            updateTransactionSourceJob(
-                                transactionSource = transactionSource,
-                                balance = transactionSource.balance - abs(transaction.amount - previousAmount),
-                                frequency = transactionSource.frequency + 1,
-                                time = time
-                            )
-                        } else {
-                            updateTransactionSourceJob(
-                                transactionSource = transactionSource,
-                                balance = transactionSource.balance + abs(transaction.amount - previousAmount),
-                                frequency = transactionSource.frequency + 1,
-                                time = time
-                            )
-                        }
                     listOf(
                         updateTransactionJob(transaction),
-                        updateBalanceJob,
+                        updateTransactionSourceJob(
+                            transactionSource = transactionSource,
+                            frequency = transactionSource.frequency + 1,
+                            time = time,
+                            transactionBaseType = transactionType.baseType,
+                            amount = transaction.amount,
+                            isUpdate = true
+                        )
                     )
                 } else {
                     listOf(
@@ -265,9 +256,11 @@ class UpsertTransactionViewModel(
                         ),
                         updateTransactionSourceJob(
                             transactionSource = transactionSource,
-                            balance = transactionSource.balance - transaction.amount,
                             frequency = transactionSource.frequency + 1,
-                            time = time
+                            time = time,
+                            isUpdate = false,
+                            amount = transaction.amount,
+                            transactionBaseType = transactionType.baseType
                         ),
                     )
                 }
@@ -323,8 +316,10 @@ class UpsertTransactionViewModel(
                     updateTransactionTypeJob(transactionType, transactionType.frequency - 1),
                     updateTransactionSourceJob(
                         transactionSource = transactionSource,
-                        balance = transactionSource.balance + transaction.amount,
-                        frequency = transactionSource.frequency - 1
+                        frequency = transactionSource.frequency - 1,
+                        transactionBaseType = Constants.CREDIT,
+                        amount = transaction.amount,
+                        isUpdate = false
                     ),
                 ).joinAll()
                 _state.update {
@@ -394,10 +389,25 @@ class UpsertTransactionViewModel(
 
     private fun updateTransactionSourceJob(
         transactionSource: TransactionSource,
-        balance: Float,
+        amount: Float,
+        transactionBaseType: String,
+        isUpdate: Boolean,
         frequency: Int,
         time: Long? = null
     ) = viewModelScope.launch {
+        val balance = if (isUpdate) {
+            if ((transactionBaseType == Constants.DEBIT && amount > previousAmount) || (transactionBaseType == Constants.CREDIT && amount <= previousAmount)) {
+                transactionSource.balance - abs(amount - previousAmount)
+            } else {
+                transactionSource.balance + abs(amount - previousAmount)
+            }
+        } else {
+            if (transactionBaseType == Constants.DEBIT) {
+                transactionSource.balance - amount
+            } else {
+                transactionSource.balance + amount
+            }
+        }
         transactionSourceRepository.saveTransactionSource(
             transactionSource.copy(
                 balance = balance,
