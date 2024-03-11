@@ -130,6 +130,7 @@
     <string name="transaction_types_label">Transaction types</string>
     <string name="transaction_sources_label">Transaction sources</string>
     <string name="categories_label">Categories</string>
+    <string name="github_label">Github</string>
     <string name="currency_label">Currency</string>
     <string name="counter_parties_label">Counter parties</string>
 </resources>

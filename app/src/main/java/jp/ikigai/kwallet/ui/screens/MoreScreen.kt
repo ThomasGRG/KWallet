@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +53,7 @@ fun MoreScreen(
     navigateToCategoriesScreen: () -> Unit,
     navigateToCounterPartyScreen: () -> Unit,
     navigateToCurrencyScreen: () -> Unit,
+    openGithubPage: () -> Unit,
 ) {
     val haptics = LocalHapticFeedback.current
 
@@ -63,6 +65,7 @@ fun MoreScreen(
         stringResource(id = R.string.categories_label) to navigateToCategoriesScreen,
         stringResource(id = R.string.counter_parties_label) to navigateToCounterPartyScreen,
         stringResource(id = R.string.currency_label) to navigateToCurrencyScreen,
+        stringResource(id = R.string.github_label) to openGithubPage
     )
 
     Scaffold(
@@ -156,7 +159,8 @@ fun MoreScreenPreview() {
         navigateToMethodsScreen = {},
         navigateToNaturesScreen = {},
         navigateToSourcesScreen = {},
-        navigateToTypesScreen = {}
+        navigateToTypesScreen = {},
+        openGithubPage = {}
     )
 }
 
@@ -188,6 +192,8 @@ fun NavGraphBuilder.addMoreScreen(navController: NavController) {
             )
         }
     ) {
+        val uriHandler = LocalUriHandler.current
+
         MoreScreen(
             navigateBack = {
                 navController.popBackStack()
@@ -233,6 +239,9 @@ fun NavGraphBuilder.addMoreScreen(navController: NavController) {
                     launchSingleTop = true
                     restoreState = true
                 }
+            },
+            openGithubPage = {
+                uriHandler.openUri("https://github.com/ThomasGRG/KWallet")
             }
         )
     }
