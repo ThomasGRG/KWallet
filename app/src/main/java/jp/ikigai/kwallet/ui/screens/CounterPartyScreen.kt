@@ -125,7 +125,7 @@ fun CounterPartyScreen(
     ) { contentPadding ->
         if (screenState.counterParties.isEmpty()) {
             EmptyScreenPlaceholder(
-                content = stringResource(id = R.string.empty_transactions_label),
+                content = stringResource(id = R.string.empty_counterparties_label),
                 contentPadding = contentPadding
             )
         } else {

@@ -125,7 +125,7 @@ fun CategoryScreen(
     ) { contentPadding ->
         if (screenState.categories.isEmpty()) {
             EmptyScreenPlaceholder(
-                content = stringResource(id = R.string.empty_transactions_label),
+                content = stringResource(id = R.string.empty_categories_label),
                 contentPadding = contentPadding
             )
         } else {

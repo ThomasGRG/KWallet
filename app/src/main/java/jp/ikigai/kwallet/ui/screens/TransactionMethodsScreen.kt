@@ -125,7 +125,7 @@ fun TransactionMethodsScreen(
     ) { contentPadding ->
         if (screenState.methods.isEmpty()) {
             EmptyScreenPlaceholder(
-                content = stringResource(id = R.string.empty_transactions_label),
+                content = stringResource(id = R.string.empty_methods_label),
                 contentPadding = contentPadding
             )
         } else {

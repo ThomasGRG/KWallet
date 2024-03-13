@@ -125,7 +125,7 @@ fun TransactionSourcesScreen(
     ) { contentPadding ->
         if (screenState.transactionSources.isEmpty()) {
             EmptyScreenPlaceholder(
-                content = stringResource(id = R.string.empty_transactions_label),
+                content = stringResource(id = R.string.empty_sources_label),
                 contentPadding = contentPadding
             )
         } else {

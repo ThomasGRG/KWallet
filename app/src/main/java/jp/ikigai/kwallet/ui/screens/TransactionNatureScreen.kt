@@ -125,7 +125,7 @@ fun TransactionNatureScreen(
     ) { contentPadding ->
         if (screenState.transactionNatures.isEmpty()) {
             EmptyScreenPlaceholder(
-                content = stringResource(id = R.string.empty_transactions_label),
+                content = stringResource(id = R.string.empty_natures_label),
                 contentPadding = contentPadding
             )
         } else {
