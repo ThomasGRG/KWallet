@@ -16,34 +16,20 @@
     <string name="are_required">are required</string>
     <string name="is_required">is required</string>
 
-    <string name="no_category_available">No category available. Please add a category first</string>
     <string name="single_category">Category</string>
-
-    <string name="no_counter_party_available">No counter party available. Please add a counter party first</string>
     <string name="single_counter_party">Counter Party</string>
-
-    <string name="no_transaction_method_available">No transaction method available. Please add a transaction method first</string>
     <string name="single_transaction_method">Transaction Method</string>
-
-    <string name="no_transaction_nature_available">No transaction nature available. Please add a transaction nature first</string>
     <string name="single_transaction_nature">Transaction Nature</string>
-
-    <string name="no_transaction_source_available">No transaction source available. Please add a transaction source first</string>
     <string name="single_transaction_source">Transaction Source</string>
-
-    <string name="no_transaction_type_available">No transaction type available. Please add a transaction type first</string>
     <string name="single_transaction_type">Transaction Type</string>
 
     <!--  CardLabels  -->
-    <string name="frequency__of_use_label">Frequency of use : %1$d</string>
+    <string name="frequency_of_use_label">Frequency of use : %1$d</string>
     <string name="transaction_amount_label">%1$s %2$s</string>
     <plurals name="transaction_count_label">
         <item quantity="one">%1$d transaction</item>
         <item quantity="other">%1$d transactions</item>
     </plurals>
-    <string name="income_label">%1$d %2$s income</string>
-    <string name="credit_label">INCOME</string>
-    <string name="debit_label">EXPENSES</string>
 
     <!--  DialogButtonLabels  -->
     <string name="button_clone">Clone transaction</string>
@@ -51,7 +37,6 @@
     <string name="dialog_reset">Reset</string>
     <string name="dialog_filter">Filter</string>
     <string name="dialog_select">Set</string>
-    <string name="dialog_save">Save</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_close">Close</string>
 
@@ -66,12 +51,9 @@
     <string name="add_source_dialog_label">Transaction source name</string>
     <string name="add_source_dialog_balance_label">Balance</string>
     <string name="add_source_dialog_currency_label">Currency</string>
-    <string name="add_source_dialog_counter_party_type_label">Counter party type</string>
     <string name="add_source_dialog_transaction_type_label">Transaction type</string>
 
     <!--  DialogRadioButtonLabels  -->
-    <string name="add_counter_party_dialog_radio_sender">Sender</string>
-    <string name="add_counter_party_dialog_radio_receiver">Receiver</string>
     <string name="add_transaction_type_dialog_radio_debit">Debit</string>
     <string name="add_transaction_type_dialog_radio_credit">Credit</string>
 
@@ -79,8 +61,6 @@
     <string name="add_source_dialog_balance_error">Enter a number >= 0</string>
     <string name="add_transaction_amount_error">Enter a number > 0</string>
     <string name="add_dialog_empty_error_label">Name cannot be empty</string>
-    <string name="add_dialog_no_selection_error_label">Please select a currency</string>
-    <string name="add_type_no_selection_error_label">Please select a type</string>
 
     <!--  TopAppBarLabels  -->
     <string name="main_screen_label">Transactions</string>
@@ -111,7 +91,6 @@
     <string name="add_category_screen_label">Create category</string>
     <string name="update_category_screen_label">Update category</string>
 
-    <string name="counterparties_screen_label">Counter Parties</string>
     <string name="add_counter_party_screen_label">Create counter party</string>
     <string name="update_counter_party_screen_label">Update counter party</string>
 
