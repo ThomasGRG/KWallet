@@ -53,6 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 fun CategoryScreen(
     navigateBack: () -> Unit,
     addNewCategory: () -> Unit,
+    editCategory: (Long) -> Unit,
     viewCategoryDetails: (Long) -> Unit,
     screenState: CategoryScreenState,
 ) {
@@ -149,6 +150,10 @@ fun CategoryScreen(
                             onClick = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 viewCategoryDetails(category.id)
+                            },
+                            onEditClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                editCategory(category.id)
                             }
                         )
                     }
@@ -164,6 +169,7 @@ fun CategoryScreenPreview() {
     CategoryScreen(
         navigateBack = {},
         addNewCategory = {},
+        editCategory = {},
         viewCategoryDetails = {},
         screenState = CategoryScreenState()
     )
@@ -206,6 +212,11 @@ fun NavGraphBuilder.addCategoryScreen(navController: NavController) {
             },
             addNewCategory = {
                 navController.navigate(Routes.UpsertCategory.getRoute()) {
+                    launchSingleTop = true
+                }
+            },
+            editCategory = { id ->
+                navController.navigate(Routes.UpsertCategory.getRoute(id)) {
                     launchSingleTop = true
                 }
             },

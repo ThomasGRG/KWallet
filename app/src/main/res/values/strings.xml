@@ -39,6 +39,7 @@
     <string name="dialog_select">Set</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_close">Close</string>
+    <string name="card_edit">Edit</string>
 
     <!--  DialogTextFieldLabels  -->
     <string name="reset_icon_dialog_label">Are you sure you want to reset the icon to default?</string>

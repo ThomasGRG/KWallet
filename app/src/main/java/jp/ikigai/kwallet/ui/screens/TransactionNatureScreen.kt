@@ -54,6 +54,7 @@ fun TransactionNatureScreen(
     navigateBack: () -> Unit,
     addNewTransactionNature: () -> Unit,
     viewTransactionNatureDetails: (Long) -> Unit,
+    editTransactionNature: (Long) -> Unit,
     screenState: TransactionNatureScreenState
 ) {
     val haptics = LocalHapticFeedback.current
@@ -149,7 +150,11 @@ fun TransactionNatureScreen(
                             onClick = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 viewTransactionNatureDetails(transactionNature.id)
-                            }
+                            },
+                            onEditClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                editTransactionNature(transactionNature.id)
+                            },
                         )
                     }
                 }
@@ -164,6 +169,7 @@ fun TransactionNatureScreenPreview() {
     TransactionNatureScreen(
         navigateBack = {},
         addNewTransactionNature = {},
+        editTransactionNature = {},
         viewTransactionNatureDetails = {},
         screenState = TransactionNatureScreenState()
     )
@@ -211,6 +217,11 @@ fun NavGraphBuilder.addTransactionNaturesScreen(navController: NavController) {
             },
             viewTransactionNatureDetails = { id ->
                 navController.navigate(Routes.TransactionNatureDetails.getRoute(id)) {
+                    launchSingleTop = true
+                }
+            },
+            editTransactionNature = { id ->
+                navController.navigate(Routes.UpsertTransactionNature.getRoute(id)) {
                     launchSingleTop = true
                 }
             },

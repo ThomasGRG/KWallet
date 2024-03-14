@@ -1,10 +1,14 @@
 package jp.ikigai.kwallet.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,7 +32,8 @@ fun ExtraInfoCard(
     subTitle: String,
     icon: String,
     frequency: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onEditClick: () -> Unit,
 ) {
     ElevatedCard(
         onClick = onClick,
@@ -61,6 +66,36 @@ fun ExtraInfoCard(
                 )
             }
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(0.9f)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        enabled = true,
+                        onClick = onEditClick
+                    )
+                    .padding(top = 15.dp, bottom = 15.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "edit",
+                )
+                Text(
+                    text = stringResource(id = R.string.card_edit),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        }
     }
 }
 
@@ -72,6 +107,7 @@ fun ExtraInfoCardPreview() {
         subTitle = "subTitle",
         icon = "Archive",
         frequency = 1,
-        onClick = {}
+        onClick = {},
+        onEditClick = {},
     )
 }

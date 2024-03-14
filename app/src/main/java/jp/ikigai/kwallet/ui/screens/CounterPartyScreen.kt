@@ -53,6 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 fun CounterPartyScreen(
     navigateBack: () -> Unit,
     addNewCounterParty: () -> Unit,
+    editCounterParty: (Long) -> Unit,
     viewCounterPartyDetails: (Long) -> Unit,
     screenState: CounterPartyScreenState
 ) {
@@ -149,7 +150,11 @@ fun CounterPartyScreen(
                             onClick = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 viewCounterPartyDetails(counterParty.id)
-                            }
+                            },
+                            onEditClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                editCounterParty(counterParty.id)
+                            },
                         )
                     }
                 }
@@ -165,6 +170,7 @@ fun CounterPartyScreenPreview() {
         navigateBack = {},
         addNewCounterParty = {},
         viewCounterPartyDetails = {},
+        editCounterParty = {},
         screenState = CounterPartyScreenState()
     )
 }
@@ -215,7 +221,12 @@ fun NavGraphBuilder.addCounterPartyScreen(navController: NavController) {
                 navController.navigate(Routes.CounterPartyDetails.getRoute(id)) {
                     launchSingleTop = true
                 }
-            }
+            },
+            editCounterParty = { id ->
+                navController.navigate(Routes.UpsertCounterParty.getRoute(id)) {
+                    launchSingleTop = true
+                }
+            },
         )
     }
 }

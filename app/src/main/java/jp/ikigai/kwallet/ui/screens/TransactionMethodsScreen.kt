@@ -53,6 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 fun TransactionMethodsScreen(
     navigateBack: () -> Unit,
     addNewTransactionMethod: () -> Unit,
+    editTransactionMethod: (Long) -> Unit,
     viewTransactionMethodDetails: (Long) -> Unit,
     screenState: TransactionMethodsScreenState
 ) {
@@ -149,7 +150,11 @@ fun TransactionMethodsScreen(
                             onClick = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 viewTransactionMethodDetails(method.id)
-                            }
+                            },
+                            onEditClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                editTransactionMethod(method.id)
+                            },
                         )
                     }
                 }
@@ -165,6 +170,7 @@ fun TransactionMethodsScreenPreview() {
         navigateBack = {},
         addNewTransactionMethod = {},
         viewTransactionMethodDetails = {},
+        editTransactionMethod = {},
         screenState = TransactionMethodsScreenState()
     )
 }
@@ -214,7 +220,12 @@ fun NavGraphBuilder.addTransactionMethodsScreen(navController: NavController) {
                 navController.navigate(Routes.TransactionMethodDetails.getRoute(id)) {
                     launchSingleTop = true
                 }
-            }
+            },
+            editTransactionMethod = { id ->
+                navController.navigate(Routes.UpsertTransactionMethod.getRoute(id)) {
+                    launchSingleTop = true
+                }
+            },
         )
     }
 }

@@ -54,6 +54,7 @@ fun TransactionSourcesScreen(
     navigateBack: () -> Unit,
     addNewTransactionSource: () -> Unit,
     viewTransactionSourceDetails: (Long) -> Unit,
+    editTransactionSource: (Long) -> Unit,
     screenState: TransactionSourcesScreenState
 ) {
     val haptics = LocalHapticFeedback.current
@@ -151,7 +152,11 @@ fun TransactionSourcesScreen(
                             onClick = {
                                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                 viewTransactionSourceDetails(transactionSource.id)
-                            }
+                            },
+                            onEditClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                editTransactionSource(transactionSource.id)
+                            },
                         )
                     }
                 }
@@ -167,6 +172,7 @@ fun TransactionSourcesScreenPreview() {
         navigateBack = {},
         addNewTransactionSource = {},
         viewTransactionSourceDetails = {},
+        editTransactionSource = {},
         screenState = TransactionSourcesScreenState()
     )
 }
@@ -213,6 +219,11 @@ fun NavGraphBuilder.addTransactionSourceScreen(navController: NavController) {
             },
             viewTransactionSourceDetails = { id ->
                 navController.navigate(Routes.TransactionSourceDetails.getRoute(id)) {
+                    launchSingleTop = true
+                }
+            },
+            editTransactionSource = { id ->
+                navController.navigate(Routes.UpsertTransactionSource.getRoute(id)) {
                     launchSingleTop = true
                 }
             },
