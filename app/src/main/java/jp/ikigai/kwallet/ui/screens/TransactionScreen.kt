@@ -14,17 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -44,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -64,6 +54,7 @@ import jp.ikigai.kwallet.ui.components.TotalTransactionInfoRow
 import jp.ikigai.kwallet.ui.components.TransactionCard
 import jp.ikigai.kwallet.ui.components.TransactionCardActionBottomSheet
 import jp.ikigai.kwallet.ui.components.TransactionHeader
+import jp.ikigai.kwallet.ui.components.TransactionScreenRoundedBottomBar
 import jp.ikigai.kwallet.ui.components.YearMonthFilterBottomSheet
 import jp.ikigai.kwallet.ui.viewmodels.TransactionScreenState
 import jp.ikigai.kwallet.ui.viewmodels.TransactionScreenViewModel
@@ -78,6 +69,8 @@ fun TransactionScreen(
     editTransaction: (Long) -> Unit,
     cloneTransaction: (Long) -> Unit,
     navigateToMoreScreen: () -> Unit,
+    navigateToTransactionSourcesScreen: () -> Unit,
+    navigateToCounterPartyScreen: () -> Unit,
     setStrings: (List<String>) -> Unit,
     setCurrency: (String) -> Unit,
     setYearMonth: (YearMonth) -> Unit,
@@ -125,7 +118,11 @@ fun TransactionScreen(
 
     val snackBarText by remember(key1 = screenState.snackBarText) { mutableStateOf(screenState.snackBarText) }
 
-    val addButtonEnabled by remember(key1 = screenState.addButtonEnabled) { mutableStateOf(screenState.addButtonEnabled) }
+    val addButtonEnabled by remember(key1 = screenState.addButtonEnabled) {
+        mutableStateOf(
+            screenState.addButtonEnabled
+        )
+    }
 
     var selectedTransactionId by remember {
         mutableLongStateOf(
@@ -245,74 +242,23 @@ fun TransactionScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                BottomAppBar(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            modifier = Modifier.weight(1f),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Settings,
-                                    contentDescription = "settings"
+                TransactionScreenRoundedBottomBar(
+                    navigateToMoreScreen = navigateToMoreScreen,
+                    navigateToTransactionSourcesScreen = navigateToTransactionSourcesScreen,
+                    navigateToCounterPartyScreen = navigateToCounterPartyScreen,
+                    addTransaction = {
+                        if (addButtonEnabled) {
+                            addTransaction()
+                        } else {
+                            scope.launch {
+                                snackBarHostState.showSnackbar(
+                                    message = snackBarText,
+                                    withDismissAction = true
                                 )
-                            }
-                        }
-                        Row(
-                            modifier = Modifier.weight(1f),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            FloatingActionButton(
-                                onClick = {
-                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    if (addButtonEnabled) {
-                                        addTransaction()
-                                    } else {
-                                        scope.launch {
-                                            snackBarHostState.showSnackbar(
-                                                message = snackBarText,
-                                                withDismissAction = true
-                                            )
-                                        }
-                                    }
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "add_new_transaction"
-                                )
-                            }
-                        }
-                        Row(
-                            modifier = Modifier.weight(1f),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    navigateToMoreScreen()
-                                }
-                            ) {
-                                Icon(imageVector = Icons.Filled.Menu, contentDescription = "more")
                             }
                         }
                     }
-                }
+                )
             }
         }
     ) { contentPadding ->
@@ -340,7 +286,9 @@ fun TransactionScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start,
-                            modifier = Modifier.fillMaxWidth().padding(10.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp)
                         ) {
                             Text(
                                 text = screenState.balance + " " + screenState.selectedCurrency,
@@ -401,6 +349,8 @@ fun TransactionScreenPreview() {
         editTransaction = {},
         cloneTransaction = {},
         navigateToMoreScreen = {},
+        navigateToTransactionSourcesScreen = {},
+        navigateToCounterPartyScreen = {},
         setStrings = {},
         setYearMonth = {},
         setCurrency = {},
@@ -453,6 +403,18 @@ fun NavGraphBuilder.addTransactionScreen(navController: NavController) {
             cloneTransaction = viewModel::cloneTransaction,
             navigateToMoreScreen = {
                 navController.navigate(Routes.More.route) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            navigateToTransactionSourcesScreen = {
+                navController.navigate(Routes.TransactionSources.route) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            navigateToCounterPartyScreen = {
+                navController.navigate(Routes.CounterParty.route) {
                     launchSingleTop = true
                     restoreState = true
                 }
